@@ -3,11 +3,11 @@
 import { getOpeningText, getOpeningLength, getHintForLevel, getEndingTexts } from './story.js';
 import {
   getCurrentStage, getLocationsForCurrentStage, setStage,
-  getAvailableStages, getCurrentStageIndex, checkLocationForDoll, getStageCount, getStageByIndex
+  getAvailableStages, getCurrentStageIndex, checkLocationForDoll
 } from './map.js';
 import {
   findDoll, checkLevelUp, getLevel, getFoundCount, getTotalCount,
-  isSecretFound, isDollFound, canFindSecret
+  isSecretFound, canFindSecret, initDolls
 } from './dolls.js';
 import {
   updateCompanionBar, updateStatusBar, showMessage, showTextSequence,
@@ -18,6 +18,8 @@ import {
   playLevelUpSound, playSecretSound, playClickSound, initAudio
 } from './audio.js';
 import { MESSAGES } from './data.js';
+import { initStory } from './story.js';
+import { initMap } from './map.js';
 
 const $ = id => document.getElementById(id);
 let currentScene = 'title';
@@ -162,8 +164,11 @@ function renderStageNav() {
 
 function bindExplorationEvents() {
   // マップポイントのクリック
+  let processing = false;
   document.querySelectorAll('.map-point').forEach(point => {
     point.addEventListener('click', async () => {
+      if (processing) return;
+      processing = true;
       playStepSound();
       const locationId = point.dataset.location;
       const doll = checkLocationForDoll(locationId);
@@ -171,13 +176,13 @@ function bindExplorationEvents() {
       if (doll) {
         await handleDollFound(doll);
       } else if (locationId === 'house_gate' && getCurrentStage().id === 4 && canFindSecret()) {
-        // 家の門 - シークレット未発見なら通常エンディングの選択肢
         await showGoHomeChoice();
       } else {
         const msgs = MESSAGES.nothingHere;
         const randomMsg = msgs[Math.floor(Math.random() * msgs.length)];
         await showMessage(randomMsg, '', 1500);
       }
+      processing = false;
     });
   });
 
@@ -207,10 +212,9 @@ async function handleDollFound(doll) {
     await showDollFound(doll);
   }
 
-  // レベルアップチェック
-  const leveledUp = checkLevelUp();
-  if (leveledUp) {
-    const newLevel = getLevel();
+  // レベルアップチェック（複数レベル同時対応）
+  const newLevels = checkLevelUp();
+  for (const newLevel of newLevels) {
     playLevelUpSound();
     await showLevelUp(newLevel);
 
@@ -294,7 +298,7 @@ function showGameMenu() {
   $('menu-story')?.addEventListener('click', () => {
     overlay.classList.remove('visible');
     playClickSound();
-    showCollection(() => {}); // 図鑑画面内にヒントも表示される
+    showCollection(() => {});
   });
 
   $('menu-close')?.addEventListener('click', () => {
@@ -352,10 +356,10 @@ function showEndingCredits(isTrue) {
   $('btn-restart')?.addEventListener('click', () => {
     playClickSound();
     stopBGM();
-    // ゲームリセット
-    import('./dolls.js').then(m => m.initDolls());
-    import('./story.js').then(m => m.initStory());
-    import('./map.js').then(m => m.initMap());
+    // 同期的にリセット（レースコンディション修正）
+    initDolls();
+    initStory();
+    initMap();
     showTitle();
   });
 }

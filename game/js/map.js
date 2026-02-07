@@ -51,8 +51,7 @@ export function getLocationsForCurrentStage() {
       ...loc,
       hasDoll: !!doll && available,
       glowing: glowing && available,
-      dollId: doll ? doll.id : null,
-      explored: doll ? false : !getDollAtLocation(loc.id)
+      dollId: doll ? doll.id : null
     };
   });
 }

@@ -92,7 +92,7 @@ export const DOLLS = [
   }
 ];
 
-// ステージデータ
+// ステージデータ（座標を十分離して配置）
 export const STAGES = [
   {
     id: 1,
@@ -103,10 +103,10 @@ export const STAGES = [
     description: '夜のゴミ捨て場。段ボールやゴミ袋の間に、捨てられた人形たちがいるかもしれない。',
     requiredLevel: 1,
     locations: [
-      { id: 'cardboard', name: '段ボール', emoji: '📦', x: 25, y: 45, description: '大きな段ボールが置いてある' },
-      { id: 'garbage_bag', name: 'ゴミ袋', emoji: '🗑️', x: 65, y: 50, description: 'ゴミ袋が積まれている' },
-      { id: 'streetlight', name: '街灯', emoji: '🏮', x: 45, y: 25, description: '街灯がぼんやり光っている' },
-      { id: 'fence', name: 'フェンス', emoji: '🚧', x: 80, y: 35, description: '古びたフェンスがある' }
+      { id: 'cardboard', name: '段ボール', emoji: '📦', x: 25, y: 20, description: '大きな段ボールが置いてある' },
+      { id: 'garbage_bag', name: 'ゴミ袋', emoji: '🗑️', x: 72, y: 70, description: 'ゴミ袋が積まれている' },
+      { id: 'streetlight', name: '街灯', emoji: '🏮', x: 70, y: 18, description: '街灯がぼんやり光っている' },
+      { id: 'fence', name: 'フェンス', emoji: '🚧', x: 25, y: 72, description: '古びたフェンスがある' }
     ]
   },
   {
@@ -118,11 +118,11 @@ export const STAGES = [
     description: '暗い公園。ブランコや滑り台の影に人形が隠れているかもしれない。',
     requiredLevel: 2,
     locations: [
-      { id: 'sandbox', name: '砂場', emoji: '⛱️', x: 30, y: 55, description: '砂場が広がっている' },
-      { id: 'swing', name: 'ブランコ', emoji: '🎠', x: 60, y: 40, description: 'ブランコが風に揺れている' },
-      { id: 'slide', name: '滑り台', emoji: '🛝', x: 75, y: 60, description: '大きな滑り台がある' },
-      { id: 'bench', name: 'ベンチ', emoji: '🪑', x: 20, y: 35, description: '古いベンチがある' },
-      { id: 'tree', name: '大きな木', emoji: '🌳', x: 50, y: 25, description: '大きな木が立っている' }
+      { id: 'sandbox', name: '砂場', emoji: '⛱️', x: 22, y: 22, description: '砂場が広がっている' },
+      { id: 'swing', name: 'ブランコ', emoji: '🎠', x: 75, y: 20, description: 'ブランコが風に揺れている' },
+      { id: 'slide', name: '滑り台', emoji: '🛝', x: 75, y: 72, description: '大きな滑り台がある' },
+      { id: 'bench', name: 'ベンチ', emoji: '🪑', x: 22, y: 72, description: '古いベンチがある' },
+      { id: 'tree', name: '大きな木', emoji: '🌳', x: 50, y: 46, description: '大きな木が立っている' }
     ]
   },
   {
@@ -134,10 +134,10 @@ export const STAGES = [
     description: '古い路地裏。雨が降っている。寂しい場所だけど、仲間が元気をくれる。',
     requiredLevel: 3,
     locations: [
-      { id: 'theater', name: '古い劇場', emoji: '🎭', x: 35, y: 40, description: '閉まったままの古い劇場' },
-      { id: 'window', name: '壊れた窓', emoji: '🪟', x: 70, y: 35, description: '窓ガラスが割れている建物' },
-      { id: 'puddle', name: '水たまり', emoji: '💧', x: 50, y: 65, description: '大きな水たまりがある' },
-      { id: 'alley', name: '路地の奥', emoji: '🌫️', x: 20, y: 50, description: '暗い路地の奥が見える' }
+      { id: 'theater', name: '古い劇場', emoji: '🎭', x: 25, y: 22, description: '閉まったままの古い劇場' },
+      { id: 'window', name: '壊れた窓', emoji: '🪟', x: 75, y: 22, description: '窓ガラスが割れている建物' },
+      { id: 'puddle', name: '水たまり', emoji: '💧', x: 50, y: 72, description: '大きな水たまりがある' },
+      { id: 'alley', name: '路地の奥', emoji: '🌫️', x: 25, y: 72, description: '暗い路地の奥が見える' }
     ]
   },
   {
@@ -149,10 +149,10 @@ export const STAGES = [
     description: '夜明け前の住宅街。少しずつ空が明るくなっている。',
     requiredLevel: 4,
     locations: [
-      { id: 'house_gate', name: '家の門', emoji: '🏠', x: 50, y: 30, description: '懐かしい家の門が見える' },
-      { id: 'garden', name: '庭', emoji: '🌷', x: 30, y: 50, description: '小さな庭がある' },
-      { id: 'mailbox', name: 'ポスト', emoji: '📮', x: 70, y: 55, description: '赤いポストがある' },
-      { id: 'secret_place', name: '不思議な光', emoji: '✨', x: 50, y: 70, description: '何か光っている...' }
+      { id: 'house_gate', name: '家の門', emoji: '🏠', x: 50, y: 18, description: '懐かしい家の門が見える' },
+      { id: 'garden', name: '庭', emoji: '🌷', x: 22, y: 50, description: '小さな庭がある' },
+      { id: 'mailbox', name: 'ポスト', emoji: '📮', x: 78, y: 50, description: '赤いポストがある' },
+      { id: 'secret_place', name: '不思議な光', emoji: '✨', x: 50, y: 78, description: '何か光っている...' }
     ]
   }
 ];

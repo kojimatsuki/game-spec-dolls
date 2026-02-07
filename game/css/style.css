@@ -6,22 +6,28 @@
   box-sizing: border-box;
 }
 
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
 body {
   font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
   background: #050510;
   color: #e0e0f0;
-  overflow: hidden;
-  width: 100vw;
-  height: 100vh;
   user-select: none;
   -webkit-user-select: none;
   -webkit-tap-highlight-color: transparent;
+  /* iOS Safari 対応: safe area */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
 #app {
   width: 100%;
   height: 100%;
   position: relative;
+  overflow: hidden;
 }
 
 /* ===== タイトル画面 ===== */
@@ -150,9 +156,10 @@ body {
 
 .message-box {
   text-align: center;
-  padding: 30px;
+  padding: 24px;
   max-width: 90%;
   max-height: 90%;
+  overflow-y: auto;
 }
 
 .msg-emoji {
@@ -185,16 +192,18 @@ body {
   display: flex;
   flex-direction: column;
   position: relative;
+  overflow: hidden;
 }
 
 .status-bar {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 8px 16px;
+  gap: 12px;
+  padding: 6px 12px;
   background: rgba(0, 0, 0, 0.5);
-  font-size: 14px;
+  font-size: 13px;
   z-index: 10;
+  flex-shrink: 0;
 }
 
 .status-level {
@@ -212,38 +221,40 @@ body {
 }
 
 .explore-header {
-  padding: 10px 16px;
+  padding: 6px 12px;
   text-align: center;
+  flex-shrink: 0;
 }
 
 .stage-name {
-  font-size: 20px;
+  font-size: 18px;
   color: #dde;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .stage-desc {
-  font-size: 13px;
+  font-size: 12px;
   color: #778;
 }
 
 /* ===== ステージナビ ===== */
 .stage-nav {
   display: flex;
-  gap: 8px;
-  padding: 6px 16px;
+  gap: 6px;
+  padding: 4px 12px;
   overflow-x: auto;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .stage-btn {
-  padding: 6px 14px;
-  font-size: 12px;
+  padding: 4px 12px;
+  font-size: 11px;
   font-family: inherit;
   background: rgba(255, 255, 255, 0.08);
   color: #889;
   border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 16px;
+  border-radius: 14px;
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.2s;
@@ -263,11 +274,12 @@ body {
 .explore-map {
   flex: 1;
   position: relative;
-  margin: 8px 16px;
+  margin: 4px 10px;
   border-radius: 12px;
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.05);
-  min-height: 0;
+  min-height: 200px;
+  overflow: hidden;
 }
 
 .map-point {
@@ -276,20 +288,21 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 10px 14px;
+  border-radius: 10px;
+  padding: 6px 10px;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
   font-family: inherit;
   color: #ccd;
+  z-index: 1;
 }
 
 .map-point:hover {
   background: rgba(255, 255, 255, 0.12);
-  transform: translate(-50%, -50%) scale(1.1);
+  transform: translate(-50%, -50%) scale(1.08);
 }
 
 .map-point:active {
@@ -308,25 +321,28 @@ body {
 }
 
 .point-emoji {
-  font-size: 28px;
+  font-size: 24px;
+  line-height: 1;
 }
 
 .point-name {
-  font-size: 11px;
+  font-size: 10px;
   color: #99a;
+  line-height: 1;
 }
 
 /* ===== ツールバー ===== */
 .explore-toolbar {
   display: flex;
   gap: 10px;
-  padding: 8px 16px;
+  padding: 6px 12px;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .btn-tool {
-  padding: 8px 20px;
-  font-size: 13px;
+  padding: 6px 16px;
+  font-size: 12px;
   font-family: inherit;
   background: rgba(255, 255, 255, 0.08);
   color: #aab;
@@ -344,20 +360,21 @@ body {
 .companion-bar {
   display: flex;
   gap: 6px;
-  padding: 10px 16px;
+  padding: 6px 12px;
   background: rgba(0, 0, 0, 0.4);
   justify-content: center;
   align-items: center;
-  min-height: 44px;
+  min-height: 36px;
+  flex-shrink: 0;
 }
 
 .companion-empty {
-  font-size: 12px;
+  font-size: 11px;
   color: #556;
 }
 
 .companion-doll {
-  font-size: 24px;
+  font-size: 22px;
   animation: companionBounce 2s ease-in-out infinite;
 }
 
@@ -552,6 +569,7 @@ body {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s;
+  -webkit-overflow-scrolling: touch;
 }
 
 .collection-screen.visible {
@@ -715,6 +733,7 @@ body {
   background: linear-gradient(180deg, #0a0a20 0%, #151530 50%, #1a1040 100%);
   text-align: center;
   padding: 20px;
+  overflow-y: auto;
 }
 
 .credits-crown {
@@ -772,23 +791,44 @@ body {
   .title-moon { font-size: 48px; }
   .btn-start { padding: 12px 36px; font-size: 16px; }
 
-  .stage-name { font-size: 17px; }
-  .stage-desc { font-size: 12px; }
-  .point-emoji { font-size: 22px; }
-  .point-name { font-size: 10px; }
-  .map-point { padding: 8px 10px; }
+  .explore-header { padding: 4px 10px; }
+  .stage-name { font-size: 16px; }
+  .stage-desc { font-size: 11px; }
+
+  .point-emoji { font-size: 20px; }
+  .point-name { font-size: 9px; }
+  .map-point { padding: 5px 8px; border-radius: 8px; }
 
   .msg-emoji { font-size: 36px; }
   .msg-text { font-size: 16px; }
+  .message-box { padding: 20px 16px; }
 
   .found-emoji { font-size: 48px; }
   .found-name { font-size: 18px; }
+  .found-message { font-size: 14px; }
 
   .collection-grid {
     grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
     gap: 8px;
   }
   .card-emoji { font-size: 28px; }
+  .collection-screen { padding: 16px; }
+}
+
+/* 非常に小さい画面（iPhone SE等） */
+@media (max-height: 600px) {
+  .explore-header { padding: 2px 10px; }
+  .stage-name { font-size: 14px; margin-bottom: 0; }
+  .stage-desc { display: none; }
+  .stage-nav { padding: 2px 10px; }
+  .explore-map { margin: 2px 8px; }
+  .explore-toolbar { padding: 4px 10px; }
+  .companion-bar { padding: 4px 10px; min-height: 30px; }
+  .companion-doll { font-size: 18px; }
+  .status-bar { padding: 4px 10px; font-size: 12px; }
+  .point-emoji { font-size: 18px; }
+  .point-name { font-size: 8px; }
+  .map-point { padding: 4px 6px; }
 }
 
 @media (min-width: 1024px) {

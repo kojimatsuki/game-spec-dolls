@@ -54,13 +54,19 @@ export function getExp() {
   return exp;
 }
 
+// 複数レベル同時に上がる場合も対応。上がった全レベルを配列で返す
 export function checkLevelUp() {
-  const nextLevel = level + 1;
-  if (nextLevel <= 4 && exp >= LEVEL_THRESHOLDS[nextLevel]) {
-    level = nextLevel;
-    return true;
+  const levels = [];
+  while (level < 4) {
+    const nextLevel = level + 1;
+    if (exp >= LEVEL_THRESHOLDS[nextLevel]) {
+      level = nextLevel;
+      levels.push(level);
+    } else {
+      break;
+    }
   }
-  return false;
+  return levels;
 }
 
 export function getDollsForStage(stageId) {
@@ -81,7 +87,6 @@ export function isSecretFound() {
 }
 
 export function canFindSecret() {
-  // シークレットを見つけるには他の全人形を見つける必要がある
   const nonSecretDolls = DOLLS.filter(d => !d.secret);
   return nonSecretDolls.every(d => foundDolls.has(d.id));
 }

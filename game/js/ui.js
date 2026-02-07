@@ -39,20 +39,25 @@ export function updateStatusBar() {
   `;
 }
 
-// メッセージ表示
+// メッセージ表示（二重resolve防止済み）
 export function showMessage(text, emoji = '', duration = 2500) {
   return new Promise(resolve => {
     const overlay = $('message-overlay');
     const msgBox = $('message-box');
     if (!overlay || !msgBox) { resolve(); return; }
 
+    let resolved = false;
+
     msgBox.innerHTML = `
       ${emoji ? `<div class="msg-emoji">${emoji}</div>` : ''}
       <div class="msg-text">${text.replace(/\n/g, '<br>')}</div>
     `;
+    overlay.style.backgroundColor = '';
     overlay.classList.add('visible');
 
     const dismiss = () => {
+      if (resolved) return;
+      resolved = true;
       overlay.classList.remove('visible');
       overlay.removeEventListener('click', dismiss);
       setTimeout(resolve, 300);
@@ -65,9 +70,10 @@ export function showMessage(text, emoji = '', duration = 2500) {
   });
 }
 
-// テキスト送り形式のメッセージ
+// テキスト送り形式のメッセージ（イベントリスナー安全版）
 export function showTextSequence(texts, onComplete) {
   let index = 0;
+  let advancing = false;
   const overlay = $('message-overlay');
   const msgBox = $('message-box');
   if (!overlay || !msgBox) { onComplete(); return; }
@@ -75,6 +81,7 @@ export function showTextSequence(texts, onComplete) {
   function showNext() {
     if (index >= texts.length) {
       overlay.classList.remove('visible');
+      overlay.style.backgroundColor = '';
       overlay.removeEventListener('click', advance);
       onComplete();
       return;
@@ -89,9 +96,13 @@ export function showTextSequence(texts, onComplete) {
       overlay.style.backgroundColor = item.bg;
     }
     overlay.classList.add('visible');
+    advancing = false;
   }
 
-  function advance() {
+  function advance(e) {
+    e.stopPropagation();
+    if (advancing) return;
+    advancing = true;
     index++;
     showNext();
   }
@@ -153,32 +164,14 @@ export function showCollection(onClose) {
   });
 }
 
-// ステージ選択UI
-export function showStageSelect(onSelect) {
-  const stages = getAvailableStages();
-  const currentIdx = getCurrentStageIndex();
-
-  const nav = $('stage-nav');
-  if (!nav) return;
-  nav.innerHTML = '';
-
-  stages.forEach((stage, i) => {
-    const btn = document.createElement('button');
-    btn.className = `stage-btn ${i === currentIdx ? 'active' : ''}`;
-    btn.textContent = `${stage.bgEmojis.split('').slice(0, 1)} ${stage.name}`;
-    btn.addEventListener('click', () => onSelect(STAGES_MAP[stage.id]));
-    nav.appendChild(btn);
-  });
-}
-
-const STAGES_MAP = { 1: 0, 2: 1, 3: 2, 4: 3 };
-
 // 人形発見演出
 export function showDollFound(doll) {
   return new Promise(resolve => {
     const overlay = $('message-overlay');
     const msgBox = $('message-box');
     if (!overlay || !msgBox) { resolve(); return; }
+
+    let resolved = false;
 
     msgBox.innerHTML = `
       <div class="found-animation">
@@ -194,7 +187,10 @@ export function showDollFound(doll) {
     overlay.classList.add('visible');
 
     const dismiss = () => {
+      if (resolved) return;
+      resolved = true;
       overlay.classList.remove('visible');
+      overlay.style.backgroundColor = '';
       overlay.removeEventListener('click', dismiss);
       setTimeout(resolve, 300);
     };
@@ -209,6 +205,8 @@ export function showLevelUp(newLevel) {
     const msgBox = $('message-box');
     if (!overlay || !msgBox) { resolve(); return; }
 
+    let resolved = false;
+
     msgBox.innerHTML = `
       <div class="levelup-animation">
         <div class="levelup-sparkle">⭐✨⭐</div>
@@ -222,7 +220,10 @@ export function showLevelUp(newLevel) {
     overlay.classList.add('visible');
 
     const dismiss = () => {
+      if (resolved) return;
+      resolved = true;
       overlay.classList.remove('visible');
+      overlay.style.backgroundColor = '';
       overlay.removeEventListener('click', dismiss);
       setTimeout(resolve, 300);
     };
@@ -237,6 +238,8 @@ export function showStoryHint(hint) {
     const msgBox = $('message-box');
     if (!overlay || !msgBox) { resolve(); return; }
 
+    let resolved = false;
+
     msgBox.innerHTML = `
       <div class="story-hint-animation">
         <div class="story-hint-emoji">${hint.emoji}</div>
@@ -249,7 +252,10 @@ export function showStoryHint(hint) {
     overlay.classList.add('visible');
 
     const dismiss = () => {
+      if (resolved) return;
+      resolved = true;
       overlay.classList.remove('visible');
+      overlay.style.backgroundColor = '';
       overlay.removeEventListener('click', dismiss);
       setTimeout(resolve, 300);
     };
@@ -263,6 +269,8 @@ export function showSecretFound(doll) {
     const overlay = $('message-overlay');
     const msgBox = $('message-box');
     if (!overlay || !msgBox) { resolve(); return; }
+
+    let resolved = false;
 
     msgBox.innerHTML = `
       <div class="secret-animation">
@@ -279,7 +287,10 @@ export function showSecretFound(doll) {
     overlay.classList.add('visible');
 
     const dismiss = () => {
+      if (resolved) return;
+      resolved = true;
       overlay.classList.remove('visible');
+      overlay.style.backgroundColor = '';
       overlay.removeEventListener('click', dismiss);
       setTimeout(resolve, 300);
     };
